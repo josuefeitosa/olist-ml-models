@@ -21,6 +21,7 @@ WITH base AS (
 ), summaryBase AS (
   SELECT
     idVendedor,
+    
     -- Quantidade de Pedidos por Vendedor e Meio de Pagamento
     SUM(CASE WHEN descTipoPagamento = 'boleto' THEN qtd_Pedido_MeioPagamento ELSE 0 END) AS qtd_boleto,
     SUM(CASE WHEN descTipoPagamento = 'credit_card' THEN qtd_Pedido_MeioPagamento ELSE 0 END) AS qtd_credit_card,
