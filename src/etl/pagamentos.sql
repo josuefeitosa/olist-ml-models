@@ -1,15 +1,24 @@
 -- Databricks notebook source
-WITH base AS (
-  SELECT 
-    pag.*,
+WITH basePedidos AS (
+  SELECT DISTINCT
+    ped.idPedido,
     item.idVendedor
   FROM silver.olist.pedido as ped
-  LEFT JOIN silver.olist.pagamento_pedido as pag ON ped.idPedido = pag.idPedido
-  LEFT JOIN silver.olist.item_pedido as item ON item.idPedido = pag.idPedido
+  LEFT JOIN silver.olist.item_pedido as item ON item.idPedido = ped.idPedido
   WHERE
     ped.dtPedido >= add_months('2018-01-01', -6) AND ped.dtPedido < '2018-01-01' AND
     item.idVendedor IS NOT NULL
-), groupBase AS (
+),
+
+base AS (
+  SELECT 
+    ped.idVendedor,
+    pag.*
+  FROM basePedidos as ped
+  LEFT JOIN silver.olist.pagamento_pedido as pag ON ped.idPedido = pag.idPedido
+), 
+
+groupBase AS (
   SELECT
     idVendedor,
     descTipoPagamento,
